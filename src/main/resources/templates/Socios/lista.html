@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Gestión de Socios</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">🎬 Club de Películas</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/}">Inicio</a>
+            <a class="nav-link active" th:href="@{/socios}">Socios</a>
+            <a class="nav-link" th:href="@{/peliculas}">Películas</a>
+            <a class="nav-link" th:href="@{/prestamos}">Préstamos</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Gestión de Socios</h1>
+        <a th:href="@{/socios/nuevo}" class="btn btn-primary">👥 Agregar Socio</a>
+    </div>
+
+    <!-- Cambiar a param.mensaje y param.error -->
+    <div th:if="${param.mensaje}" class="alert alert-success">
+        <span th:text="${param.mensaje}"></span>
+    </div>
+    <div th:if="${param.error}" class="alert alert-danger">
+        <span th:text="${param.error}"></span>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${#lists.isEmpty(socios)}" class="text-center py-4">
+                <p class="text-muted">No hay socios registrados en el sistema.</p>
+                <a th:href="@{/socios/nuevo}" class="btn btn-primary">Agregar el primer socio</a>
+            </div>
+
+            <div th:unless="${#lists.isEmpty(socios)}" class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo Electrónico</th>
+                        <th>Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="socio : ${socios}">
+                        <td th:text="${socio.nombre}"></td>
+                        <td th:text="${socio.correo}"></td>
+                        <td th:text="${socio.telefono}"></td>
+                        <td>
+                            <a th:href="@{/socios/editar/{id}(id=${socio.id})}"
+                               class="btn btn-sm btn-outline-primary">✏️ Editar</a>
+                            <a th:href="@{/socios/eliminar/{id}(id=${socio.id})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('¿Está seguro de eliminar este socio?')">🗑️ Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

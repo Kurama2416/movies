@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:if="${socio.id == null}">Agregar Socio</title>
+    <title th:if="${socio.id != null}">Editar Socio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">🎬 Club de Películas</a>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 th:if="${socio.id == null}">Agregar Nuevo Socio</h1>
+    <h1 th:if="${socio.id != null}">Editar Socio</h1>
+
+    <div th:if="${param.mensaje}" class="alert alert-success">
+        <span th:text="${param.mensaje}"></span>
+    </div>
+    <div th:if="${param.error}" class="alert alert-danger">
+        <span th:text="${param.error}"></span>
+    </div>
+
+    <form th:action="@{/socios/guardar}" method="post">
+        <input type="hidden" name="id" th:value="${socio?.id}">
+
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre Completo *</label>
+            <input type="text" class="form-control" id="nombre" name="nombre"
+                   th:value="${socio?.nombre}" required maxlength="100">
+        </div>
+
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico *</label>
+            <input type="email" class="form-control" id="correo" name="correo"
+                   th:value="${socio?.correo}" required maxlength="100">
+            <div class="form-text">Formato: usuario@dominio.com</div>
+        </div>
+
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono *</label>
+            <input type="text" class="form-control" id="telefono" name="telefono"
+                   th:value="${socio?.telefono}"
+                   onkeypress="return event.charCode >= 48 && event.charCode <= 57"
+                   pattern="[0-9]+" title="Solo se permiten números" required maxlength="15">
+            <div class="form-text">Solo números, sin espacios ni caracteres especiales</div>
+        </div>
+
+        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="submit" class="btn btn-primary me-md-2">
+                <span th:if="${socio.id == null}">Agregar Socio</span>
+                <span th:if="${socio.id != null}">Actualizar Socio</span>
+            </button>
+            <a th:href="@{/socios}" class="btn btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

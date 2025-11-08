@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Películas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">🎬 Club de Películas</a>
+        <div class="navbar-nav ms-auto">
+            <a class="nav-link" th:href="@{/}">Inicio</a>
+            <a class="nav-link" th:href="@{/socios}">Socios</a>
+            <a class="nav-link active" th:href="@{/peliculas}">Películas</a>
+            <a class="nav-link" th:href="@{/prestamos}">Préstamos</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Catálogo de Películas</h1>
+        <a th:href="@{/peliculas/nuevo}" class="btn btn-primary">➕ Agregar Película</a>
+    </div>
+
+    <div th:if="${mensaje}" class="alert alert-success">
+        <span th:text="${mensaje}"></span>
+    </div>
+    <div th:if="${error}" class="alert alert-danger">
+        <span th:text="${error}"></span>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div th:if="${peliculas.empty}" class="text-center py-4">
+                <p class="text-muted">No hay películas registradas en el sistema.</p>
+                <a th:href="@{/peliculas/nuevo}" class="btn btn-primary">Agregar la primera película</a>
+            </div>
+
+            <div th:unless="${peliculas.empty}" class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>Título</th>
+                        <th>Director</th>
+                        <th>Año</th>
+                        <th>Género</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="pelicula : ${peliculas}">
+                        <td th:text="${pelicula.titulo}"></td>
+                        <td th:text="${pelicula.director}"></td>
+                        <td th:text="${pelicula.anioEstreno}"></td>
+                        <td>
+                            <span class="badge bg-secondary" th:text="${pelicula.genero}"></span>
+                        </td>
+                        <td>
+                            <a th:href="@{/peliculas/editar/{id}(id=${pelicula.id})}"
+                               class="btn btn-sm btn-outline-primary">✏️ Editar</a>
+                            <a th:href="@{/peliculas/eliminar/{id}(id=${pelicula.id})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('¿Está seguro de eliminar esta película?')">🗑️ Eliminar</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
